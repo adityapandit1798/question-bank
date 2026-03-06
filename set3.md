@@ -1,7 +1,3 @@
-Perfect! Here is **Question Set 3: Top 25 DevOps Interview Questions**, with **interview-ready answers** tailored for a **Cloud DevOps Engineer (4 YOE)**.
-
----
-
 # 🔥 Top 25 DevOps Interview Questions – Interview Answers
 
 ## 🔁 CI/CD – Jenkins
@@ -411,15 +407,3 @@ Reflection: "I now enforce build time budgets in our Definition of Done..."
 ```
 
 ---
-
-### 📥 Ready for Set 4?
-✅ **All 25 questions answered** with senior-level depth.  
-✅ **Copy-paste ready** for your interview notes.  
-✅ **Structured for quick revision** with key points + pro tips.
-
-**What's next?**  
-- 🧠 Behavioral/Leadership questions?  
-- 🏗️ System Design scenarios?  
-- 🎯 AWS/Azure/GCP deep-dive?  
-
-Let me know—I'm ready to help you ace that interview! 🚀
