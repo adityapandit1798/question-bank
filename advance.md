@@ -3,7 +3,7 @@
 ## Section 1 - System Design & Architecture
 
 ### 1. How would you design a highly available multi-tenant system in AWS?
-**[Design]**  
+ 
 **Sample Answer:**  
 > "I'd use a shared EKS cluster with namespace-per-tenant isolation. Each tenant gets dedicated namespace, ResourceQuotas, NetworkPolicies, and separate databases (RDS per tenant or schema-per-tenant). An ALB with host-based routing sends traffic to the right namespace. IAM roles per tenant restrict AWS resource access. Data is encrypted at rest (KMS with tenant-specific keys) and in transit (TLS). For HA, the cluster spans 3 AZs with pod anti-affinity rules."
 
@@ -17,7 +17,7 @@
 ---
 
 ### 2. How would you reduce API response time from 30s to under 5s?
-**[Design]**  
+ 
 **Sample Answer:**  
 > "First, profile to find the bottleneck - usually it's database queries or external API calls. Add Redis/ElastiCache for hot data. Optimize slow queries with proper indexes and EXPLAIN ANALYZE. Move heavy processing to async workers (SQS + Lambda or Celery). Add connection pooling (PgBouncer). If it's compute-bound, scale horizontally behind ALB. Use CloudFront for cacheable responses. Implement pagination instead of returning large datasets."
 
@@ -31,7 +31,7 @@
 ---
 
 ### 3. How would you rotate secrets securely across multiple EC2/Windows servers?
-**[Design]**  
+ 
 **Sample Answer:**  
 > "Store all secrets in AWS Secrets Manager with automatic rotation enabled (Lambda rotation function). Applications pull secrets at startup using the SDK, not from env vars or files. For EC2/Windows, use SSM Parameter Store with IAM instance profiles - no hardcoded credentials. The rotation Lambda creates new secret, updates the service, tests it, then marks it current. Use Secrets Manager's versioning (AWSCURRENT/AWSPREVIOUS) so apps can gracefully handle rotation without downtime."
 
@@ -45,7 +45,7 @@
 ---
 
 ### 4. How would you deploy a FastAPI app on EKS?
-**[Design]**  
+ 
 **Sample Answer:**  
 > "Containerize with a multi-stage Dockerfile (build deps, then copy to slim image with uvicorn). Push to ECR. Create Kubernetes manifests: Deployment with resource limits, readiness probe on /health, HPA based on CPU/request latency. Expose via ClusterIP Service + Ingress (ALB Ingress Controller). Use ConfigMaps for config, Secrets for credentials. CI/CD pipeline: GitHub Actions builds image, pushes to ECR, updates manifests, ArgoCD syncs to cluster."
 
@@ -60,7 +60,7 @@
 ---
 
 ### 5. How do you implement CI/CD in AWS?
-**[Design]**  
+ 
 **Sample Answer:**  
 > "For AWS-native: CodePipeline orchestrates the flow, CodeBuild compiles/tests/builds Docker image, CodeDeploy handles rolling/blue-green deployment to ECS/EKS/EC2. For open-source: GitHub Actions or Jenkins for CI, ArgoCD for CD to Kubernetes. Pipeline stages: lint > unit test > build image > push to ECR > deploy to staging > integration tests > manual approval > deploy to prod. Infrastructure changes go through a separate Terraform pipeline with plan > approve > apply."
 
@@ -74,7 +74,7 @@
 ---
 
 ### 6. How do you handle zero-downtime deployments?
-**[Design]**  
+ 
 **Sample Answer:**  
 > "In Kubernetes: rolling update strategy with maxSurge=1, maxUnavailable=0 ensures old pods stay up until new ones pass readiness probes. Add preStop hooks with a 5s sleep to allow endpoint propagation before shutdown. For databases, use backward-compatible migrations only - add columns, never rename/delete in the same release. For ECS: use blue-green with ALB target group switching. Always have rollback ready: keep previous image tag, use `kubectl rollout undo` or revert the Git commit in GitOps."
 
@@ -89,7 +89,7 @@
 ---
 
 ### 7. How do you secure inter-service communication in Kubernetes on AWS?
-**[Design]**  
+ 
 **Sample Answer:**  
 > "Layer 1: NetworkPolicies to restrict which pods can talk to which (default deny all, then allow specific). Layer 2: Service mesh (Istio or AWS App Mesh) for mTLS - every pod gets a sidecar that encrypts all traffic with mutual TLS certificates, automatically rotated. Layer 3: IRSA (IAM Roles for Service Accounts) so each service has least-privilege AWS access. Layer 4: OPA/Gatekeeper policies to enforce security standards across all deployments."
 
@@ -103,7 +103,7 @@
 ---
 
 ### 8. How do you monitor 1000+ servers efficiently?
-**[Design]**  
+ 
 **Sample Answer:**  
 > "Use a pull-based system like Prometheus with node_exporter on every server, federated across regions. For AWS-native, CloudWatch agent with custom metrics + CloudWatch Composite Alarms to reduce noise. Centralize logs with Fluentd/Fluent Bit shipping to OpenSearch or CloudWatch Logs Insights. Dashboards in Grafana with per-team views. Alert routing via PagerDuty with escalation policies. At 1000+ scale, use Thanos or Cortex on top of Prometheus for long-term storage and global querying."
 
@@ -118,7 +118,7 @@
 ---
 
 ### 9. How do you reduce AWS cost for large-scale infrastructure?
-**[Design]**  
+ 
 **Sample Answer:**  
 > "Start with visibility: Cost Explorer + CUR (Cost and Usage Report) to identify top spenders. Quick wins: Reserved Instances or Savings Plans for steady-state (up to 72% savings), Spot Instances for fault-tolerant workloads (up to 90% savings), right-sizing with Compute Optimizer. Storage: S3 Lifecycle policies to move old data to Glacier. Kubernetes: Karpenter for efficient node provisioning, pod right-sizing with VPA. Governance: tag everything, set AWS Budgets with alerts, shut down dev/staging outside business hours."
 
@@ -133,7 +133,7 @@
 ---
 
 ### 10. How would you architect a disaster recovery strategy?
-**[Design]**  
+ 
 **Sample Answer:**  
 > "Define RTO and RPO first - they drive the architecture. For pilot light: keep AMIs/containers and DB replicas in the DR region, scale up on failover. For warm standby: run a scaled-down copy of production in the DR region behind Route 53 failover routing. For active-active: full deployment in both regions with Route 53 latency-based routing and DynamoDB Global Tables or Aurora Global Database. Automate failover with health checks and Lambda. Test quarterly with gameday exercises."
 
@@ -408,7 +408,7 @@
 ---
 
 ### 29. How would you design a highly available system that can handle traffic spikes during peak sales?
-**[Design]**  
+ 
 **Sample Answer:**  
 > "Multi-AZ deployment behind ALB with Auto Scaling Groups (EC2) or HPA (Kubernetes). Pre-scale before the event based on historical data - don't rely solely on reactive scaling. Use CloudFront + S3 for static assets. ElastiCache (Redis) for session data and hot cache. SQS to decouple and buffer writes (order processing). Aurora with read replicas for database reads. DynamoDB for high-throughput key-value lookups. Load test beforehand with realistic traffic patterns (k6/Locust)."
 
@@ -440,7 +440,7 @@
 ## Section 3 - Expert Level
 
 ### 31. How would you design a CI/CD pipeline for 50+ microservices with zero downtime deployment?
-**[Design]**  
+ 
 **Sample Answer:**  
 > "Monorepo or polyrepo - either way, each service has its own pipeline triggered only on its directory changes (path filter). Shared pipeline templates (GitHub reusable workflows / Jenkins shared libraries) ensure consistency. Pipeline: lint > unit test > build image > push to ECR > deploy to staging > integration test > approval > canary deploy to prod (10% traffic via Istio) > full rollout. ArgoCD for GitOps - merge to main = deploy. Rollback: revert the Git commit, ArgoCD syncs automatically."
 
@@ -499,7 +499,7 @@
 ---
 
 ### 35. Design a highly available Kubernetes cluster across multiple AZs.
-**[Design]**  
+ 
 **Sample Answer:**  
 > "Control plane: EKS manages this automatically (multi-AZ etcd + API servers). For self-managed: 3 master nodes across 3 AZs with etcd running as a 3-member cluster. Worker nodes: node groups spread across 3 AZs. Pod topology: use topologySpreadConstraints to distribute pods evenly across AZs. Storage: use EBS CSI driver with volume topology awareness (EBS is AZ-bound). Networking: VPC CNI with subnets in each AZ, ALB Ingress routes to pods across all AZs. PodDisruptionBudgets ensure minimum availability during node maintenance."
 
@@ -604,7 +604,7 @@
 ---
 
 ### 42. How would you migrate a monolithic app to microservices?
-**[Design]**  
+ 
 **Sample Answer:**  
 > "Strangler Fig pattern: don't rewrite everything at once. Step 1: Put an API gateway in front of the monolith. Step 2: Identify bounded contexts (auth, payments, orders). Step 3: Extract one service at a time - start with the least coupled, highest-value piece. Route its traffic through the gateway to the new microservice instead of the monolith. Step 4: Decouple the database - each service gets its own DB (this is the hardest part). Use events (SQS/Kafka) for cross-service communication instead of shared DB. Step 5: Repeat until the monolith is empty."
 
@@ -634,7 +634,7 @@
 ---
 
 ### 44. How do you design disaster recovery with defined RTO & RPO?
-**[Design]**  
+ 
 **Sample Answer:**  
 > "RPO (Recovery Point Objective) = maximum acceptable data loss. RPO of 1 hour means you need backups/replication at least hourly. RPO of 0 = synchronous replication (Aurora Global, DynamoDB Global Tables). RTO (Recovery Time Objective) = how fast you must recover. RTO of minutes = active-active or warm standby. RTO of hours = pilot light. Architecture: Route 53 health checks trigger failover to DR region. Automate everything - runbooks fail under pressure. Test with quarterly gamedays. Cost increases as RTO/RPO decrease."
 
