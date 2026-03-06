@@ -69,12 +69,6 @@ variable "ebs_availability_zone" {
   type        = string
 }
 
-variable "prevent_destroy" {
-  description = "Enable prevent_destroy lifecycle on the instance"
-  type        = bool
-  default     = false
-}
-
 variable "tags" {
   description = "Additional tags for all resources"
   type        = map(string)

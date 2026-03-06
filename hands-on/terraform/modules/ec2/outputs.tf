@@ -1,16 +1,16 @@
 output "instance_id" {
   description = "ID of the EC2 instance"
-  value       = aws_instance.this.id
+  value       = module.ec2_instance.id
 }
 
 output "public_ip" {
   description = "Public IP of the EC2 instance"
-  value       = aws_instance.this.public_ip
+  value       = module.ec2_instance.public_ip
 }
 
 output "private_ip" {
   description = "Private IP of the EC2 instance"
-  value       = aws_instance.this.private_ip
+  value       = module.ec2_instance.private_ip
 }
 
 output "ebs_volume_id" {
@@ -20,5 +20,5 @@ output "ebs_volume_id" {
 
 output "availability_zone" {
   description = "AZ where the instance is running"
-  value       = aws_instance.this.availability_zone
+  value       = module.ec2_instance.availability_zone
 }
