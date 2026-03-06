@@ -1,0 +1,4 @@
+## Application Configuration
+APP_ENV=production
+LOG_LEVEL=info
+MAX_CONNECTIONS=100

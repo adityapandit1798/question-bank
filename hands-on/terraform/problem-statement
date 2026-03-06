@@ -1,0 +1,32 @@
+
+Write Terraform code to:
+Create an EC2 module
+Reuse it for dev, qa, and prod without duplication
+Show folder structure for:
+Root module
+Child EC2 module
+
+Write Terraform backend configuration to:
+Store state in an S3 bucket
+Use DynamoDB for state locking
+Write Terraform code to:
+Use different state files for dev and prod
+
+Write Terraform code to:
+Run a shell script during EC2 creation using remote-exec
+
+Write Terraform code to:
+Copy a file to EC2 using file provisioner
+
+Write Terraform code to:
+Prevent accidental deletion of an EC2 instance
+Write Terraform code to:
+Replace resource without downtime
+
+Write Terraform code to:
+Create an EBS volume
+Attach it to an EC2 instance
+Write Terraform code to:
+Modify EBS volume type without data loss
+
+---

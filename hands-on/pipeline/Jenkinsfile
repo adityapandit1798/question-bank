@@ -1,0 +1,40 @@
+pipeline {
+    agent any
+
+    environment {
+        REGISTRY = 'xxx.dkr.ecr.us-east-1.amazonaws.com'
+        IMAGE    = 'myapp-backend'
+        TAG      = "${BUILD_NUMBER}"
+    }
+
+    stages {
+        stage('Build') {
+            steps {
+                sh 'docker build -t $REGISTRY/$IMAGE:$TAG .'
+            }
+        }
+        stage('Push') {
+            steps {
+                sh '''
+                    aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin $REGISTRY
+                    docker push $REGISTRY/$IMAGE:$TAG
+                '''
+            }
+        }
+        stage('Deploy') {
+            steps {
+                sh '''
+                    aws eks update-kubeconfig --region us-east-1 --name prod-cluster
+                    helm upgrade --install myapp ./helm-chart \
+                        --set image.repository=$REGISTRY/$IMAGE \
+                        --set image.tag=$TAG \
+                        -n backend --atomic --timeout 5m
+                '''
+            }
+        }
+    }
+
+    post {
+        failure { slackSend channel: '#alerts', message: "❌ Build ${BUILD_NUMBER} failed" }
+    }
+}
